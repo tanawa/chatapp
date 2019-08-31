@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+	<!-- The core Firebase JS SDK is always required and must be listed first -->
+<script src="https://www.gstatic.com/firebasejs/6.5.0/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/3.1.0/firebase-database.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<style type="text/css">
+	#content{
+		padding: 10px 25px;
+	}
+	p{
+		background-color: #6A25A0;
+		color:#ddd;
+		width: 40%;
+		padding: 10px 25px;
+		border-radius:10px 10px 10px 0px;
+		box-shadow: 0px 0px 5px 0px #ddd;
+		margin-bottom: 20px;
+		margin-top:5px;
+	}
+	a{
+		font-size: 8px;
+		opacity: 0.8;
+	}
+</style>
+<script>
+  // Your web app's Firebase configuration
+  var firebaseConfig = {
+    apiKey: "AIzaSyAS8FVZdUsHQykpoZEB-uAHRHQYSLPnatg",
+    authDomain: "testmes-2fcf4.firebaseapp.com",
+    databaseURL: "https://testmes-2fcf4.firebaseio.com",
+    projectId: "testmes-2fcf4",
+    storageBucket: "testmes-2fcf4.appspot.com",
+    messagingSenderId: "866846768783",
+    appId: "1:866846768783:web:6433ff67e1638dec"
+  };
+  // Initialize Firebase
+  var content=document.getElementById("content");
+  firebase.initializeApp(firebaseConfig);
+  var ref=firebase.database().ref("chat/user");
+  ref.once("value",function(snapshot){
+  	let t=snapshot.val().substring(1,snapshot.val().length-1);
+  	t=t.split(",");
+  	t.forEach(text=>create(text));
+  	
+  },function(err){
+  	console.log("error");
+  });
+  function create(text){
+  	text=text.substring(1,text.length-1);
+  	let splits=text.split("||");
+$("#content").append("<a>"+splits[0]+" ได้ส่งข้อความ</a><p>"+splits[1]+"</p>");
+window.scrollTo(0,document.body.scrollHeight);
+  }
+var start=true;
+  ref.on("value",function(snapshot){
+  	if(start){
+  		start=false;
+  		
+  	}else{
+  		let t=snapshot.val().substring(1,snapshot.val().length-1);
+  	t=t.split(",");
+  	console.log(t[t.length-1]);
+  	create(t[t.length-1]);
+  	}
+  },function(err){
+  	console.log("error");
+  });
+</script>
+
+</head>
+<body>
+<div id="content">
+</div>
+</body>
+</html>
